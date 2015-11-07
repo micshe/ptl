@@ -56,17 +56,16 @@ ptl_locks are built on stdio stream structures to open files.  the underlying fi
 
 however, the underlying file descriptors can only be closed by a call to ptl_destroy() call, which is not performed in the atfork() handlers.  this means that file descriptors will leak into forked processes unless each lock is explicitely destroyed in the new process.  this leaking does not interfere with their locking behaviour, but it will waste open file descriptors, which are sometimes a limited resource. 
 
-
-#issues
 these locks are extraordinarily slow, and can never be sped up.  pure stdio locks will be faster, so if speed is really an issue, skip over ptl_locks and go straight to them.
 
-how ptl_locks behave is subject to the underlying posix C library implementation.  one particular issue is the behaviour of the lock in the subprocess after a fork().  posix conformant behaviour requires no stdio functions to be called in a subprocess creating from a multithreaded parent process, as many of the locks may be perminently frozen (and possibly other reasons i've yet to sort out).  under GNU 
-libc-2.9 this does not appear to occur, but accessing ptl locks in from any subprocess should probably be avoided even so. 
 
-the win32 api provides an equivalent _lock_file() and _unlock_file() pair of stdio mutex lock functions, but no _try_lock_file() function.  porting to win32 would require a redesign to accomodate this.  this should not effect any cygwin-based win32 software.
+#issues 
+how ptl_locks behave is subject to the underlying posix C library implementation.  one particular issue is the behaviour of the lock in the subprocess after a fork().  posix conformant behaviour requires no stdio functions to be called in a subprocess creating from a multithreaded parent process, as many of the locks may be perminently frozen (and possibly other reasons i've yet to sort out).  under GNU libc-2.9 this does not appear to occur, but accessing ptl locks in from any subprocess should probably be avoided even so. 
 
 
 #future work
+the win32 api provides an equivalent _lock_file() and _unlock_file() pair of stdio mutex lock functions, but no _try_lock_file() function.  porting to win32 would require a redesign to accomodate this.  this should not effect any cygwin-based win32 software.
+
 currently all ptl_locks are mutex-locks, that can only be held by one thread at a time.  implementing a shared-lock mechanism ontop of these could be useful.
 
 currently the PTL_INIT macro initialises a structure with C99 syntax.  by replacing the ptl_lock structure with an array of void* pointers, the PTL_INIT macro could be used to initialise a structure with C89 syntax, if this is to become an issue.
