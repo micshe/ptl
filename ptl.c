@@ -33,7 +33,10 @@ int ptl_destroy(struct ptl_lock*lock)
 		return -1;
 	}
 
-	if(lock->file==stdin||lock->file==stdout||lock->file==stderr)
+	if(lock->file==NULL||
+	   lock->file==stdin||
+	   lock->file==stdout||
+	   lock->file==stderr)
 	{
 		lock->file=NULL;
 		lock->flag = 0;

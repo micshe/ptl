@@ -12,7 +12,7 @@ struct ptl_lock
 	unsigned long count;
 };
 
-#define PTL_INIT { .file = stderr, .flag = 0, .count = 0 }
+#define PTL_INIT { .file = NULL, .flag = 0, .count = 0 }
 
 int ptl_init(struct ptl_lock*lock);
 int ptl_destroy(struct ptl_lock*lock);
