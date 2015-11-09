@@ -60,7 +60,7 @@ these locks are extraordinarily slow, and can never be sped up.  pure stdio lock
 
 
 #issues 
-how ptl_locks behave is subject to the underlying posix C library implementation.  one particular issue is the behaviour of the lock in the subprocess after a fork().  posix conformant behaviour requires no stdio functions to be called in a subprocess created from a multithreaded parent process, as many of the locks may be perminently frozen (and possibly for other reasons i've yet to sort out).  under GNU libc-2.9 this does not appear to occur, but accessing ptl locks in from any subprocess should probably be avoided even so. 
+how ptl_locks behave is subject to the underlying posix C library implementation.  one particular issue is the behaviour of the lock in the subprocess after a fork().  posix conformant behaviour requires no stdio functions to be called in a subprocess created from a multithreaded parent process, as many of the locks may be perminently frozen (and possibly for other reasons i've yet to sort out).  under GNU libc-2.9 this does not appear to occur, but accessing ptl locks in from any subprocess should probably be avoided even so.  under clang/FreeBSD-10 (and whatever libc it uses) locks *are* frozen after forks. 
 
 
 #future work
